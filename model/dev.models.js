@@ -22,7 +22,56 @@ const devSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    bio: {
+        type: String,
+        required: true
+    },
+    experience: {
+        type: Number,
+        required: true
+    },
+    github: {
+        type: String,
+        required: true
+    },
+    linkedin: {
+        type: String,
+        required: true
+    },
+    twitter: {
+        type: String
+    },
+    hourlyRate: {
+        type: Number,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    portfolio: {
+        type: String
+    },
+    preferredRole: {
+        type: String,
+        required: true
+    },
+    remote: {
+        type: Boolean,
+    },
+    resume: {
+        type: Buffer,
+        required: true
+    },
+    skills: {
+        type: [String],
+        required: true
+    },
+    pastProjects: {
+        type: [String]
     }
-}, {TimeRanges: true});
+
+}, {timestamps: true});
 
 export const Dev = mongoose.model("Dev", devSchema);

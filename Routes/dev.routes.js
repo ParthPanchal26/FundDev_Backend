@@ -1,5 +1,5 @@
 import express, { Route } from "express";
-import {register, login, logout, getMyProfile, devFormController} from '../Controllers/dev.controller.js'
+import {register, login, logout, getMyProfile, updateDev} from '../Controllers/dev.controller.js'
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -12,6 +12,6 @@ router.get('/logout', logout);
 
 router.get('/me', isAuthenticated, getMyProfile);
 
-router.put('/devform', isAuthenticated, devFormController);
+router.put('/updatedev', isAuthenticated, updateDev);
 
 export default router;

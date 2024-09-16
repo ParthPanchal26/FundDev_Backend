@@ -6,7 +6,9 @@ import errorHandler from '../middlewares/error.middleware.js'
 export const register = async (req, res, next) => {
     try {
 
-        const { firstname, lastname, username, email, password } = req.body;
+        const { firstname, lastname, username, email, password,
+            bio, experience, github, linkedin, twitter, hourlyRate, location,
+            portfolio, preferredRole, remote, resume, skills, pastProjects } = req.body;
 
         let dev = await Dev.findOne({
             email,
@@ -16,18 +18,33 @@ export const register = async (req, res, next) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        user = await Dev.create({
+        dev = await Dev.create({
             firstname,
             lastname,
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            bio,
+            experience,
+            github,
+            linkedin,
+            twitter,
+            hourlyRate,
+            location,
+            portfolio,
+            preferredRole,
+            remote,
+            resume,
+            skills,
+            pastProjects
         });
 
-        sendToken(user, res, 201, "user SignedUp!")
+        sendToken(dev, res, 201, "user SignedUp!")
 
     } catch (error) {
+
         next(error)
+
     }
 }
 
@@ -91,28 +108,75 @@ export const getMyProfile = (req, res, next) => {
     }
 }
 
-export const devFormController = async (req, res, next) => {
 
+// export const updateDev = async (req, res, next) => {
+
+//     try {
+        
+//         let user = req.dev; 
+//         // taken logged user
+
+//         const updateData = req.body; 
+//         // taken updating fields
+
+//         const updatedDev = await Dev.findByIdAndUpdate(
+//             user._id,
+//             {
+//                 $set: "what will here?",
+//                 $push: {
+//                     "what will here?"
+//                 }
+//             }
+//         )
+
+//     } catch (error) {
+//         next(error)
+//     }
+
+// }
+
+
+export const updateDev = async (req, res, next) => {
     try {
+        
+        let user = req.dev;
+        const updateData = req.body;
 
-        let { bio, experience } = req.body;
+        const updatedDev = await Dev.findByIdAndUpdate(
+            user._id,
+            {
+                $set: {
+                    firstname: updateData.firstname || user.firstname,
+                    lastname: updateData.lastname || user.lastname,
+                    username: updateData.username || user.username,
+                    email: updateData.email || user.email,
+                    bio: updateData.bio || user.bio,
+                    experience: updateData.experience || user.experience,
+                    github: updateData.github || user.github,
+                    linkedin: updateData.linkedin || user.linkedin,
+                    twitter: updateData.twitter || user.twitter,
+                    hourlyRate: updateData.hourlyRate || user.hourlyRate,
+                    location: updateData.location || user.location,
+                    portfolio: updateData.portfolio || user.portfolio,
+                    preferredRole: updateData.preferredRole || user.preferredRole,
+                    remote: updateData.remote !== undefined ? updateData.remote : user.remote,
+                    resume: updateData.resume || user.resume
+                },
+                ...(updateData.skills ? { $push: { skills: { $each: updateData.skills } } } : {}),
+                ...(updateData.pastProjects ? { $push: { pastProjects: { $each: updateData.pastProjects } } } : {})
+            },
+            { new: true, runValidators: true }
+        );
 
-        // userId = req.dev;
+        if (!updatedDev) {
+            return res.status(404).json({ message: "Developer not found" });
+        }
 
-        // let developer = Dev.findOne({
-        //     userId
-        // })
-
-
-        res.json({
-            user: req.dev,
-            bio,
-            experience,
-        })
-
-
+        res.status(200).json({
+            message: "Developer updated successfully",
+            updatedDev
+        });
     } catch (error) {
         next(error);
     }
-
-}
+};
