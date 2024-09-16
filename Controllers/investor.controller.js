@@ -1,63 +1,62 @@
-import { Dev } from '../model/dev.models.js'
+import { Investor } from '../model/investor.models.js'
 import bcrypt from 'bcrypt'
 import { sendToken } from '../utils/sendToken.utils.js'
 import errorHandler from '../middlewares/error.middleware.js'
 
 export const register = async (req, res, next) => {
+
     try {
 
-        const { firstname, lastname, username, email, password,
-            bio, experience, github, linkedin, twitter, hourlyRate, location,
-            portfolio, preferredRole, remote, resume, skills, pastProjects } = req.body;
+        const { firstname, lastname, username, email, password, firmname, maxInvestmentRange,
+            minInvestmentRange, portfolioSize, preferredStages, preferredIndustries,
+            investmentHistory, bio, location, website, linkedin, twitter } = req.body;
 
-        let dev = await Dev.findOne({
+        let investor = await Investor.findOne({
             email,
         });
 
-        if (dev) return res.status(409).send("User Already Exist")
+        if (investor) return res.status(409).send("User Already Exist")
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        dev = await Dev.create({
+        investor = await Investor.create({
             firstname,
             lastname,
             username,
             email,
             password: hashedPassword,
+            firmname,
+            maxInvestmentRange,
+            minInvestmentRange,
+            portfolioSize,
+            preferredStages,
+            preferredIndustries,
+            investmentHistory,
             bio,
-            experience,
-            github,
-            linkedin,
-            twitter,
-            hourlyRate,
             location,
-            portfolio,
-            preferredRole,
-            remote,
-            resume,
-            skills,
-            pastProjects
+            website,
+            linkedin,
+            twitter
         });
 
-        sendToken(dev, res, 201, "user SignedUp!")
+        sendToken(investor, res, 201, "user SignedUp!")
 
     } catch (error) {
-
         next(error)
-
     }
 }
 
 export const login = async (req, res, next) => {
+
     try {
 
         const { email, password } = req.body;
 
-        const user = await Dev.findOne({
+        const user = await Investor.findOne({
             email,
         }).select("+password");
 
-        if (!user) return next(new errorHandler("Devloper not found", 404))
+        if (!user) return next(new errorHandler("Investor not found", 404))
 
         const isMatch = await bcrypt.compare(password, user.password);
 
@@ -65,7 +64,6 @@ export const login = async (req, res, next) => {
 
         sendToken(user, res, 200, `Welcome, ${user.firstname}`)
 
-
     } catch (error) {
 
         next(error)
@@ -73,8 +71,8 @@ export const login = async (req, res, next) => {
     }
 }
 
-
 export const logout = (req, res, next) => {
+
     try {
 
         res.status(200).cookie("token", "", {
@@ -83,7 +81,7 @@ export const logout = (req, res, next) => {
             secure: process.env.NODE_ENV === 'Development' ? false : true
         }).json({
             success: true,
-            message: "Developer deleted!"
+            message: "Investor deleted!"
         })
 
     } catch (error) {
@@ -91,16 +89,17 @@ export const logout = (req, res, next) => {
         next(error)
 
     }
+
 }
 
-export const getMyProfile = (req, res, next) => {
-    
+export const getMyProfile = async (req, res, next) => {
+
     try {
 
-       
+        
         res.status(200).json({
             success: true,
-            user: req.dev,
+            user: req.investor,
         });
 
     } catch (error) {
@@ -108,15 +107,17 @@ export const getMyProfile = (req, res, next) => {
         next(error)
 
     }
+
 }
 
-export const updateDev = async (req, res, next) => {
+export const updateinvestor = async (req, res, next) => {
+
     try {
 
-        let user = req.dev;
+        let user = req.investor;
         const updateData = req.body;
 
-        const updatedDev = await Dev.findByIdAndUpdate(
+        const updatedInvestor = await Investor.findByIdAndUpdate(
             user._id,
             {
                 $set: {
@@ -125,32 +126,36 @@ export const updateDev = async (req, res, next) => {
                     username: updateData.username || user.username,
                     email: updateData.email || user.email,
                     bio: updateData.bio || user.bio,
-                    experience: updateData.experience || user.experience,
-                    github: updateData.github || user.github,
                     linkedin: updateData.linkedin || user.linkedin,
                     twitter: updateData.twitter || user.twitter,
-                    hourlyRate: updateData.hourlyRate || user.hourlyRate,
                     location: updateData.location || user.location,
-                    portfolio: updateData.portfolio || user.portfolio,
-                    preferredRole: updateData.preferredRole || user.preferredRole,
-                    remote: updateData.remote !== undefined ? updateData.remote : user.remote,
-                    resume: updateData.resume || user.resume
+                    portfolioSize: updateData.portfolioSize || user.portfolioSize,
+                    firmname: updateData.firmname || user.firmname,
+                    maxInvestmentRange: updateData.maxInvestmentRange || user.maxInvestmentRange,
+                    minInvestmentRange: updateData.minInvestmentRange || user.minInvestmentRange,
+                    portfolioSize: updateData.portfolioSize || user.portfolioSize,
+                    preferredStages: updateData.preferredStages || user.preferredStages,
+                    preferredIndustries: updateData.preferredIndustries || user.preferredIndustries,
+                    investmentHistory: updateData.investmentHistory || user.investmentHistory,
+                    website: updateData.website || user.website,
                 },
-                ...(updateData.skills ? { $push: { skills: { $each: updateData.skills } } } : {}),
-                ...(updateData.pastProjects ? { $push: { pastProjects: { $each: updateData.pastProjects } } } : {})
             },
             { new: true, runValidators: true }
         );
 
-        if (!updatedDev) {
-            return res.status(404).json({ message: "Developer not found" });
+        if (!updatedInvestor) {
+            return res.status(404).json({ message: "Investor not found" });
         }
 
         res.status(200).json({
-            message: "Developer updated successfully",
-            updatedDev
+            message: "Investor updated successfully",
+            updatedInvestor
         });
+    
     } catch (error) {
+
         next(error);
+    
     }
-};
+
+}

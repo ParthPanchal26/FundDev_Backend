@@ -1,5 +1,6 @@
 import express from "express";
 import devRouter from './Routes/dev.routes.js'
+import investorRouter from './Routes/investor.routes.js'
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import cors from 'cors';
@@ -27,6 +28,8 @@ app.use(cors({
 
 
 app.use("/api/v1/dev", devRouter);
+app.use("/api/v1/investor", investorRouter);
+
 app.use(errorMiddleware)
 
 app.get('/' , (req , res)=>{
