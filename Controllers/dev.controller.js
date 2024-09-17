@@ -34,9 +34,8 @@ export const register = async (req, res, next) => {
             portfolio,
             preferredRole,
             remote,
-            resume,
+            userType,
             skills,
-            pastProjects
         });
 
         sendToken(dev, res, 201, "user SignedUp!")
@@ -134,10 +133,8 @@ export const updateDev = async (req, res, next) => {
                     portfolio: updateData.portfolio || user.portfolio,
                     preferredRole: updateData.preferredRole || user.preferredRole,
                     remote: updateData.remote !== undefined ? updateData.remote : user.remote,
-                    resume: updateData.resume || user.resume
                 },
-                ...(updateData.skills ? { $push: { skills: { $each: updateData.skills } } } : {}),
-                ...(updateData.pastProjects ? { $push: { pastProjects: { $each: updateData.pastProjects } } } : {})
+                ...(updateData.skills ? { $push: { skills: { $each: updateData.skills } } } : {})
             },
             { new: true, runValidators: true }
         );
