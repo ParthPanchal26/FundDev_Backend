@@ -66,7 +66,11 @@ const entrepreneurSchema = mongoose.Schema({
     twitter: {
         type: String,
         required: true
+    },
+    userType: {
+        type: String,
     }
-}, {timestamps: true});
+
+}, { timestamps: true });
 
 export const Entrepreneur = mongoose.model("Entrepreneur", entrepreneurSchema);

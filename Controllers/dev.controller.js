@@ -150,6 +150,7 @@ export const updateDev = async (req, res, next) => {
             message: "Developer updated successfully",
             updatedDev
         });
+        
     } catch (error) {
         next(error);
     }

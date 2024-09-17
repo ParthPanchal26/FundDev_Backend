@@ -70,8 +70,11 @@ const devSchema = mongoose.Schema({
     },
     pastProjects: {
         type: [String]
+    },
+    userType: {
+        type: String,
     }
 
-}, {timestamps: true});
+}, { timestamps: true });
 
 export const Dev = mongoose.model("Dev", devSchema);

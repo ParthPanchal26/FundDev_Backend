@@ -68,7 +68,11 @@ const investorSchema = mongoose.Schema({
     },
     twitter: {
         type: String
+    },
+    userType: {
+        type: String,
     }
+
 }, { timestamps: true });
 
 export const Investor = mongoose.model("Investor", investorSchema);
