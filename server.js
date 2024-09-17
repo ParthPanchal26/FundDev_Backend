@@ -37,9 +37,9 @@ app.use("/api/v1/post", postRouter);
 app.use(errorMiddleware)
 
 app.get('/' , (req , res)=>{
-   res.send(`Tu mera koi na hoke bhi kuchh lage, chin tapak dam dam, us pondry ke dan ke bille`)
+   res.send('hello from simple server :)')
 })
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}/`);
+    console.log(`Server running on https://funddev-backend.onrender.com/`);
 });
