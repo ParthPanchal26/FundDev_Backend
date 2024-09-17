@@ -95,7 +95,6 @@ export const logout = (req, res, next) => {
 export const getMyProfile = async (req, res, next) => {
 
     try {
-
         
         res.status(200).json({
             success: true,
