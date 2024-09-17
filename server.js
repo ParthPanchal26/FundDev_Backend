@@ -5,7 +5,7 @@ import entrepreneurRouter from './Routes/entrepreneur.routes.js'
 import postRouter from './Routes/post.routes.js'
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
-import cors from 'cors';
+import cors from "cors";
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import { connectDB } from "./config/db.config.js";
 const app = express();
@@ -21,11 +21,13 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({
-    origin: [process.env.FRONTEND_URI],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-}));
+app.use(
+    cors({
+        origin: [process.env.FRONTEND_URL, 'http://localhost:5173'], // Add your React local URL here
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+    })
+);
 
 
 
