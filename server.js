@@ -37,7 +37,7 @@ app.use("/api/v1/post", postRouter);
 app.use(errorMiddleware)
 
 app.get('/' , (req , res)=>{
-   res.send('hello from simple server :)')
+   res.send(`Tu mera koi na hoke bhi kuchh lage, chin tapak dam dam, us pondry ke dan ke bille`)
 })
 
 app.listen(PORT, () => {
