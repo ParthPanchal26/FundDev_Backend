@@ -8,7 +8,7 @@ export const register = async (req, res, next) => {
 
         const { firstname, lastname, username, email, password,
             bio, experience, github, linkedin, twitter, hourlyRate, location,
-            portfolio, preferredRole, remote, resume, skills, pastProjects } = req.body;
+            portfolio, preferredRole, remote, userType, skills } = req.body;
 
         let dev = await Dev.findOne({
             email,
