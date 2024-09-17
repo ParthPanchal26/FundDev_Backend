@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
             email,
         });
 
-        if (investor) return res.status(409).send("User Already Exist")
+        if (investor) return res.status(409).send("Already have account!")
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
