@@ -60,16 +60,9 @@ const devSchema = mongoose.Schema({
     remote: {
         type: Boolean,
     },
-    resume: {
-        type: Buffer,
-        required: true
-    },
     skills: {
         type: [String],
         required: true
-    },
-    pastProjects: {
-        type: [String]
     },
     userType: {
         type: String,
